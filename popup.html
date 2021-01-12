@@ -1,0 +1,79 @@
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <link href="vendor/mdsp/mdsp-css.min.css" rel="stylesheet">
+    <link href="vendor/osbar/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="vendor/font-awesome-4.7.0/css/font-awesome.min.css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>MindSphere Data Entry Assistaint</title>
+    <script src = "popup.js" charset = "UTF-8"></script>
+    </head>
+
+  <body>
+    <osbar-root id="_mdspbar" ng-version="6.0.6">
+      <mdsp-home-link><a href="#">
+          <img src="icon.png" style="height: 24px; margin: 6px;"> </a></mdsp-home-link>
+      <div data-mdsp-e2e="osbar_dropdownWrapper" class="_mdsp-dropdownWrapper _mdsp-tenantInfo text">
+        <a data-mdsp-e2e="osbar_dropdownLinkEnabled"><span class="dropdown-link-enabled">Mindsphere Data Entry Assistant&nbsp;</span></a>
+      </div>
+
+      <div id="_mdsp-filler"></div>
+      <mdsp-operator-type>
+        <div id="_mdsp-operatorType">
+          <div class="_mdsp-operatorType__innerWrap">
+            EasyAsset
+          </div>
+        </div>
+      </mdsp-operator-type>
+    </osbar-root>
+
+    <div class="mdsp mdsp-defaults" id="_mdspcontent" style="
+        min-width: 500px;
+        min-height: 500px;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-align: left;
+      ">
+
+
+
+
+
+        <center>
+      <button class="button button--ghost has-color-forced-black" title="Navigate into Iframe" style="margin: 0px !important; font-family: Siemens Sans, Arial,sans-serif;" id="iFrameDive">
+        <b>Navigate into the workspace</b> </button>
+      <br>
+      <br>
+        <button class="button button--ghost has-color-forced-black" title="Navigate into Iframe" style="margin: 0px !important; font-family: Siemens Sans, Arial,sans-serif;" id="dataSource">
+        <b>Process data sources</b> </button>
+        <button class="button button--ghost has-color-forced-black" title="Navigate into Iframe" style="margin: 0px !important; font-family: Siemens Sans, Arial,sans-serif;" id="dataMap">
+        <b>Process data mappings</b> </button>
+        <br>
+
+      </center>
+      <textarea id="csvPaste" name="csvPaste" rows="18" cols = "70"></textarea>
+
+
+
+
+
+
+
+
+      <div class="has-color-forced-gray400" style="margin-top: 5px; font-size: 14px; text-align: right;">
+        <p>
+          Your use of this tool is considered acknowledgement that any error or damage caused by incorrect assignments of values is not the fault of the tool or developer.
+          PLEASE double check all values automatically generated for error.
+        </p>
+        <a class="has-color-forced-gray250" style="text-decoration: none;" title="License" href="githublink" target="_new">
+          Developed by Chris Wilson, Mindsphere/Fermecraft <i class="fa fa-legal"></i></a>
+        <br>
+        <a class="has-color-forced-gray250" style="text-decoration: none;" title="chrome web store" href="chromewebstorelink" target="_new">v.1.0.3 <i class="fa fa-chrome"></i></a>
+      </div>
+    </div>
+
+    <script type="module" src="./scripts.js"></script>
+
+</body>
+</html>
