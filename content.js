@@ -15,8 +15,8 @@ chrome.runtime.onMessage.addListener(async function (request)
         //create radio buttons for either append or overwrite (for now, overwrite)
         let saveOption = 'overwrite'; //or 'append'
         //create radio buttons for automatic assetID, user chosen or human-readable (look at Node-RED code)
-        //et assetIDOption = 'automatic'; //'automatic' or 'user' or 'human';
-        let assetIDOption = 'user';
+        let assetIDOption = 'automatic'; //'automatic' or 'user' or 'human';
+        //let assetIDOption = 'user';
 
         //rules:
         //cannot name datasources "S7","OPCUA","MODBUSTCP", "MODBUSRTU","IOSHIELD", "SYSTEM", "ROCKWELL"  "mclib", etc
