@@ -1,4 +1,23 @@
 # Mindsphere-Asset-Automation
+
+>## DEV Edit
+> **NEW** mclib datapoint example:
+>```csv
+>mclib,myDataSourceName,My Datasource description
+>myDataSourceName,myVariableName,,unit,datatype
+>myDataSourceName,outsideTemp,,Deg,DOUBLE
+>myDataSourceName,powerOut,,kW,DOUBLE
+>myDataSourceName,motorTemp,,Deg,DOUBLE
+>myDataSourceName,callanTest,,unit,BOOLEAN
+>myDataSourceName,callanRules,,unit,BOOLEAN
+>myDataSourceName,boi,,unit,DOUBLE
+>```
+>Datamapping currently remains unchanged.
+>
+>The empty ",," in the csv datapoints above is for an optional datapoint >description
+>
+>## END DEV EDIT
+
 Asset entry and mapping automation tool for Siemens' Mindsphere
 
 This document serves as an instruction manual on how to use this tool, as proper input validation is not yet part of the tool.
