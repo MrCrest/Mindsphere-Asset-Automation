@@ -564,47 +564,62 @@ chrome.runtime.onMessage.addListener(async function (request)
     else if (request.action === "Map")
     {
         
-        function jsonRequest(targetURL)
-        {
-            var jsonRequest = new XMLHttpRequest();
-            jsonRequest.open("GET", targetURL,false);
-            jsonRequest.send(null);
-            var jsonData =  JSON.parse(jsonRequest.responseText);
-            return jsonData;
-        }
+        let currentURL = document.URL;
+        let agentID = currentURL.split("/")[3];
+        let tenantName = currentURL.split("-")[0];
+
 
         //step 1, finding the URL of the DP ID JSON, and get it
-        var currentURL = document.URL;
-        var agentID = currentURL.split("/")[3];
-        var subTennant = currentURL.split("-")[0];
-        var dataURL = subTennant + "-uipluginassetmanagermciot2040.eu1.mindsphere.io/api/mindconnectdevicemanagement/v3/devices/" + agentID + "/dataConfig";
-        var dataPointIdJSON = jsonRequest(dataURL);
+        let resDataConfig = await fetch(`${tenantName}-uipluginassetmanagermclib.eu1.mindsphere.io/api/agentmanagement/v3/agents/${agentID}/dataSourceConfiguration`, {
+            'method': 'GET',
+            'headers': {
+                "Access-Control-Allow-Origin": document.location.origin,
+                "referer": `https://${tenantName}-uipluginassetmanagermclib.eu1.mindsphere.io/${agentID}/datasource`,
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-origin',
+                "accept": "application/hal+json,application/json"
+            }
+        });
+        var dataPointIdJSON = await resDataConfig.json();
+        console.log("dataPointIdJSON",dataPointIdJSON);
+
 
         //step 2, same thing but for asset ID JSON
+        let resAssets = await fetch(`${tenantName}-uipluginassetmanagermclib.eu1.mindsphere.io/api/assetmanagement/v3/assets?size=1000`, {
+            'method': 'GET',
+            //'body': JSON.stringify(body),
+            'headers': {
 
-        var assetURL = subTennant + "-uipluginassetmanagermciot2040.eu1.mindsphere.io/api/assetmanagement/v3/assets?size=1000"
-        var assetIdJSON = jsonRequest(assetURL);
+                "Access-Control-Allow-Origin": document.location.origin,
+                "referer": `https://${tenantName}-uipluginassetmanagermclib.eu1.mindsphere.io/${agentID}/datamapping`,
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-origin',
+                "accept": "application/hal+json,application/json"
+
+            }
+        });
+        var assetIdJSON = await resAssets.json();
+        console.log("assetIdJSON",assetIdJSON);
         
 
         //step 3, create 2 dictionary sets to keyval common tongue names to ID's
-
-        var dataPointDict = [];
-        var dataPointTargetLoc = dataPointIdJSON.dataSources[0].dataPoints;
-        for (var i in dataPointTargetLoc)
-        {
-            dataPointDict.push(
-            {
-                name : dataPointTargetLoc[i].name,
-                ID : dataPointTargetLoc[i].dataPointId
-            })
+        let dataMapConfig = {}
+        for (let dataSource of dataPointIdJSON.dataSources) {
+            dataMapConfig[dataSource['name']] = {};
+            for (let datapoint of dataSource.dataPoints) {
+                dataMapConfig[dataSource['name']][datapoint.name] = datapoint.id
+            }
         }
+        console.log('dataMapConfig',dataMapConfig);
+
 
         var assetDict = [];
         var assetTargetLoc = assetIdJSON._embedded.assets;
 
         for (var i in assetTargetLoc)
         {
-
             assetDict.push(
             {
                 name : assetTargetLoc[i].name,
@@ -612,28 +627,30 @@ chrome.runtime.onMessage.addListener(async function (request)
             })
         }
         
+        
         //loop starts here
-
         var rows = request.payload.split('\n');
 
         for (var i = 0; i < rows.length; i++)
         {
             var points = rows[i].split(',');
  
-            var dpName = points[0];
-            var grpName = points[1];
-            var varName = points[2];
-            var assetName = points[3];           
+            //DatasourceName,DatapointName,Asset,Aspect,VariableName
+            var dataSourceName = points[0];
+            var dpName = points[1];
+            var assetName = points[2];
+            var aspectName = points[3];
+            var variableName = points[4];           
   
-            var dpNameObject = dataPointDict.find(o => o.name === dpName);
+            //var dpNameObject = dataPointDict.find(o => o.name === dpName);
             var assetNameObject = assetDict.find(o => o.name === assetName);
             var parameters = JSON.stringify
             ({
                 "agentId" : agentID,
-                "dataPointId" : dpNameObject.ID,
+                "dataPointId" : dataMapConfig[dataSourceName][dpName],
                 "entityId" : assetNameObject.ID, 
-                "propertySetName" : grpName,
-                "propertyName" : varName,
+                "propertySetName" : aspectName,
+                "propertyName" : variableName,
                 "keepMapping" : true
             })
 

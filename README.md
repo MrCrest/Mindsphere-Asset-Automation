@@ -12,10 +12,12 @@
 >myDataSourceName,callanRules,,unit,BOOLEAN
 >myDataSourceName,boi,,unit,DOUBLE
 >```
->Datamapping currently remains unchanged.
+>The empty ",," in the csv datapoints above is for an optional datapoint description
 >
->The empty ",," in the csv datapoints above is for an optional datapoint >description
->
+>**NEW** Datamapping example:
+>```csv
+>DatasourceName,DatapointName,Asset,Aspect,VariableName
+>```
 >## END DEV EDIT
 
 Asset entry and mapping automation tool for Siemens' Mindsphere
