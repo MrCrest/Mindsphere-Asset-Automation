@@ -3,8 +3,8 @@ chrome.runtime.onMessage.addListener(async function (request)
     if (request.action === "Nav")
     {
         //TODO: automate by checking for '/plugin/ at end of url
-        var iFrameDiv = document.getElementById('mdspCore-plugin__content'); //may not be necessary
-        var iFrameURL = iFrameDiv.getElementsByTagName("iframe")[0].src;
+        let iFrameDiv = document.getElementById('mdspCore-plugin__content'); //may not be necessary
+        let iFrameURL = iFrameDiv.getElementsByTagName("iframe")[0].src;
         //window.open(iFrameURL);
         window.location.href = iFrameURL; //does this fix popup being blocked?
     
@@ -474,96 +474,9 @@ chrome.runtime.onMessage.addListener(async function (request)
         console.log(resBody);
         location.reload();
         
-        
-
-        //console.log($.get('https://xxxxxxxx-uipluginassetmanagermclib.eu1.mindsphere.io/api/agentmanagement/v3/agents/' + datasource + '/dataSourceConfiguration'));
-        
-        // //opens the editor for data points
-        // var pluginName = document.location.href.includes('mclib') ? 'mclib' : 'agent';
-        // console.log(pluginName);
-        // var openEditMode = document.getElementsByClassName("button--primary--with-icon")[0];
-        // var openEditMode = pluginName == 'mclib' ? document.getElementsByClassName("button button--primary withoutMargin")[0] : document.getElementsByClassName("button--primary--with-icon")[0] ;
-        // openEditMode.click();
-
-        // var rows = request.payload.split('\n');
-        // rows.forEach(function(entry)
-        // {
-        //     var points = entry.split(',');
-            
-        //     var addDataPoint = pluginName == 'mclib' ? document.getElementsByClassName("button button--secondaryContentAction")[document.getElementsByClassName("button button--secondaryContentAction").length -2] : document.getElementsByClassName("button--simple-with-icon spacing-right mediumIcon")[document.getElementsByClassName("button--simple-with-icon spacing-right mediumIcon").length-1];
-        //     addDataPoint.click();
-
-        //     var nameElement = document.getElementById('name');
-        //     nameElement.value= points[0];
-        //     nameElement.dispatchEvent(new Event('input', { 'bubbles': true }));
-
-        //     var unitElement = document.getElementById('unit');
-        //     unitElement.value= points[1];
-        //     unitElement.dispatchEvent(new Event('input', { 'bubbles': true }));
-
-        //     if(pluginName == 'mclib'){
-        //         document.getElementsByClassName("ui-dropdown-trigger")[0].click()
-        //         switch(points[2]) //int long double boolean string 0 1 2 3 4
-        //         {
-        //             case "BOOLEAN":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[0].click()
-        //                 break;
-        //             case "INT":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[1].click()
-        //                 break;
-        //             case "LONG":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[2].click()
-        //                 break;
-        //             case "DOUBLE":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[3].click()
-        //                 break;
-        //             case "STRING":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[4].click()
-        //                 break;
-        //             case "BIG_STRING":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[5].click()
-        //                 break;
-        //             case "TIMESTAMP":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[6].click()
-        //                 break;
-        //         }                
-        //     } else {
-        //         document.getElementsByClassName("fa fa-fw fa-caret-down ui-clickable")[0].click()
-        //         switch(points[2]) //int long double boolean string 0 1 2 3 4
-        //         {
-        //             case "INT":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[0].click()
-        //                 break;
-        //             case "LONG":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[1].click()
-        //                 break;
-        //             case "DOUBLE":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[2].click()
-        //                 break;
-        //             case "BOOLEAN":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[3].click()
-        //                 break;
-        //             case "STRING":
-        //                 document.getElementsByClassName("ui-dropdown-item ui-corner-all")[4].click()
-        //                 break;
-        //         }
-        //     }
-           
-        //     if(pluginName == 'mclib'){
-        //         var acceptData = document.querySelector('[data-mdsp-e2e="datapoint-add_save-button"]');
-        //     } else{
-        //         var addressElement = document.getElementById('address');
-        //         addressElement.value=points[3];
-        //         addressElement.dispatchEvent(new Event('input', { 'bubbles': true }));
-        //         var acceptData = document.getElementsByClassName("mdspCore-popOver__footer-bar-button")[0];
-        //     }
-
-        //     acceptData.click();
-        // });
     }
     else if (request.action === "Map")
-    {
-        
+    {       
         let currentURL = document.URL;
         let agentID = currentURL.split("/")[3];
         let tenantName = currentURL.split("-")[0];
@@ -581,14 +494,13 @@ chrome.runtime.onMessage.addListener(async function (request)
                 "accept": "application/hal+json,application/json"
             }
         });
-        var dataPointIdJSON = await resDataConfig.json();
-        console.log("dataPointIdJSON",dataPointIdJSON);
+        let dataPointIdJSON = await resDataConfig.json();
+        //console.log("dataPointIdJSON",dataPointIdJSON);
 
 
         //step 2, same thing but for asset ID JSON
         let resAssets = await fetch(`${tenantName}-uipluginassetmanagermclib.eu1.mindsphere.io/api/assetmanagement/v3/assets?size=1000`, {
             'method': 'GET',
-            //'body': JSON.stringify(body),
             'headers': {
 
                 "Access-Control-Allow-Origin": document.location.origin,
@@ -600,25 +512,25 @@ chrome.runtime.onMessage.addListener(async function (request)
 
             }
         });
-        var assetIdJSON = await resAssets.json();
-        console.log("assetIdJSON",assetIdJSON);
+        let assetIdJSON = await resAssets.json();
+        //console.log("assetIdJSON",assetIdJSON);
         
 
         //step 3, create 2 dictionary sets to keyval common tongue names to ID's
         let dataMapConfig = {}
         for (let dataSource of dataPointIdJSON.dataSources) {
-            dataMapConfig[dataSource['name']] = {};
+            dataMapConfig[dataSource.name] = {};
             for (let datapoint of dataSource.dataPoints) {
-                dataMapConfig[dataSource['name']][datapoint.name] = datapoint.id
+                dataMapConfig[dataSource.name][datapoint.name] = datapoint.id
             }
         }
-        console.log('dataMapConfig',dataMapConfig);
+        //console.log('dataMapConfig',dataMapConfig);
 
 
-        var assetDict = [];
-        var assetTargetLoc = assetIdJSON._embedded.assets;
+        let assetDict = [];
+        let assetTargetLoc = assetIdJSON._embedded.assets;
 
-        for (var i in assetTargetLoc)
+        for (let i in assetTargetLoc)
         {
             assetDict.push(
             {
@@ -627,52 +539,49 @@ chrome.runtime.onMessage.addListener(async function (request)
             })
         }
         
-        
-        //loop starts here
-        var rows = request.payload.split('\n');
 
-        for (var i = 0; i < rows.length; i++)
+        //loop starts here
+        let rows = request.payload.split('\n');
+
+        for (let i = 0; i < rows.length; i++)
         {
-            var points = rows[i].split(',');
+            let points = rows[i].split(',');
  
             //DatasourceName,DatapointName,Asset,Aspect,VariableName
-            var dataSourceName = points[0];
-            var dpName = points[1];
-            var assetName = points[2];
-            var aspectName = points[3];
-            var variableName = points[4];           
+            let dataSourceName = points[0];
+            let dpName = points[1];
+            let assetName = points[2];
+            let aspectName = points[3];
+            let variableName = points[4];           
   
-            //var dpNameObject = dataPointDict.find(o => o.name === dpName);
-            var assetNameObject = assetDict.find(o => o.name === assetName);
-            var parameters = JSON.stringify
-            ({
+            //let dpNameObject = dataPointDict.find(o => o.name === dpName);
+            let assetNameObject = assetDict.find(o => o.name === assetName);
+            let parameters = {
                 "agentId" : agentID,
                 "dataPointId" : dataMapConfig[dataSourceName][dpName],
                 "entityId" : assetNameObject.ID, 
                 "propertySetName" : aspectName,
                 "propertyName" : variableName,
                 "keepMapping" : true
-            })
+            }
 
-            var postDataMap = new XMLHttpRequest();
-            var MapURL = '/api/mindconnect/v3/dataPointMappings';
-            postDataMap.open('POST', MapURL, true);
-            postDataMap.setRequestHeader('Content-type', 'application/json');
-            postDataMap.setRequestHeader('x-xsrf-token', document.cookie.split('XSRF-TOKEN=')[1].split(';')[0]);
-            postDataMap.onreadystatechange = function()
-            {
-                if(postDataMap.readyState == 4 && postDataMap.status == 200)
-                {
-                    alert(postDataMap.responseText);
+
+            let dataPointPost = await fetch('/api/mindconnect/v3/dataPointMappings', {
+                'method': 'POST',
+                'body': JSON.stringify(parameters),
+                'headers': {
+                    'Content-type': 'application/json;charset=UTF-8',
+                    'x-xsrf-token': document.cookie.split('XSRF-TOKEN=')[1].split(';')[0],
+                    "Access-Control-Allow-Origin": document.location.origin,
+                    "accept": "application/hal+json,application/json"
                 }
+            });
+            //console.log('response.status',dataPointPost.status,'response.ok',dataPointPost.ok);
+            if (!dataPointPost.ok) {
+                alert(`Error: ${dataPointPost.status}, ${await dataPointPost.text()}`);
             }
-            postDataMap.send(parameters)
-            
-            finTime = Date.now();
-            while (Date.now() < finTime + 25)
-            {
-            }
+
         }
         location.reload();          
     }
-})
+});
